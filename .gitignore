@@ -1,0 +1,49 @@
+# Environment / secrets
+.env
+.env.*
+!.env.example
+
+# Dependencies
+/vendor/
+/node_modules/
+
+# Laravel runtime
+/storage/logs/*
+/storage/framework/cache/*
+/storage/framework/sessions/*
+/storage/framework/views/*
+/storage/framework/testing/*
+/public/storage
+
+# IDE
+.idea/
+.vscode/
+
+# macOS / Windows
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Local databases
+*.sqlite
+*.sqlite3
+
+# Private credentials
+*.pem
+*.key
+*.p12
+*.pfx
+credentials.json
+service-account*.json
+
+# Temporary / backup files
+*~
+*.tmp
+*.bak
+*.old
+*.old.php
+
+# PHP info
+phpinfo.php
