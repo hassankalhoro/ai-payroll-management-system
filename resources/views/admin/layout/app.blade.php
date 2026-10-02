@@ -35,6 +35,7 @@
         <script src="{{ asset('admin_assets/src/js/vendor/modernizr-2.8.3.min.js') }}"></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.2/croppie.min.css"/>
         <link rel="stylesheet" type="text/css" href="{{ asset('admin_assets/dist/css/site-style.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ asset('admin_assets/dist/css/ai-theme.css') }}">
         @yield('css')
 
     </head>
@@ -179,6 +180,7 @@
 
             });
         </script>
+        @include('admin.ai._assistant')
         @yield('js')
     </body>
 </html>
