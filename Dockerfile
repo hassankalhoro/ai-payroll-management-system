@@ -14,6 +14,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         libxml2-dev \
         libonig-dev \
         libcurl4-openssl-dev \
+        libmagickwand-dev \
         zip \
         unzip \
         git \
@@ -28,6 +29,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         exif \
         pdo_mysql \
         opcache \
+    && printf "\n" | pecl install imagick \
+    && docker-php-ext-enable imagick \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
