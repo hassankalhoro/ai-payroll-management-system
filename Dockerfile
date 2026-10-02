@@ -1,5 +1,5 @@
 # Laravel 8 payroll app - Railway/Docker image
-FROM php:8.1-cli
+FROM php:8.3-cli
 
 # System libraries + PHP extensions required by:
 # pdo_mysql (DB), gd (dompdf/qrcode/images), zip+xml (phpspreadsheet),
