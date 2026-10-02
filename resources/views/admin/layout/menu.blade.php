@@ -4,6 +4,12 @@
             <a href="{{ route('admin.dashboard') }}"><i class="ik ik-bar-chart-2"></i><span>Dashboard</span></a>
         </div>
 
+        <div class="nav-item {{ request()->routeIs(['admin.ai.*']) ? 'active' : '' }}">
+            <a href="{{ route('admin.ai.page') }}"><i class="ik ik-cpu"></i><span>AI Insights</span>
+                <span class="badge">AI</span>
+            </a>
+        </div>
+
         <div class="nav-lavel">Manage Employees</div>
         <div class="nav-item has-sub {{ request()->routeIs('admin.employee.*') ? 'active open' : '' }} {{ request()->routeIs('admin.overtime.*') ? 'active open' : '' }} {{ request()->routeIs('admin.cashadvance.*') ? 'active open' : '' }}">
             <a href="javascript:void(0)"><i class="ik users ik-users"></i><span>Employees</span>

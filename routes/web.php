@@ -94,6 +94,15 @@ Route::group(['namespace'=>'Admin','as'=>'admin.'],function(){
         Route::get("/settings","SettingsController@index")->name('settings.index');
         Route::post("/settings","SettingsController@update")->name('settings.update');
 
+        // ---- AI assistant & analytics (OpenAI) ----
+        Route::get('/ai', 'AiController@insightsPage')->name('ai.page');
+        Route::post('/ai/chat', 'AiController@chat')->name('ai.chat');
+        Route::post('/ai/insights', 'AiController@insights')->name('ai.insights');
+        Route::post('/ai/anomalies', 'AiController@anomalies')->name('ai.anomalies');
+        Route::post('/ai/predict', 'AiController@predict')->name('ai.predict');
+        Route::post('/ai/org-health', 'AiController@orgHealth')->name('ai.orgHealth');
+        Route::post('/ai/ocr', 'AiController@ocr')->name('ai.ocr');
+
 
         //position routes
 		Route::resource('position','PositionController');
