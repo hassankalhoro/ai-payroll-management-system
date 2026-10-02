@@ -37,5 +37,12 @@ if [ "$RUN_MIGRATIONS" = "true" ]; then
     fi
 fi
 
+# Opt-in demo data (12 months of realistic sample payroll/invoice data for the
+# AI features). Safe: DemoDataSeeder refuses to run if employees already exist.
+if [ "$RUN_DEMO_SEEDER" = "true" ]; then
+    echo "RUN_DEMO_SEEDER=true -> seeding demo data"
+    php artisan db:seed --class=DemoDataSeeder --force || true
+fi
+
 echo "Starting Laravel on 0.0.0.0:${PORT:-8000}"
 exec php artisan serve --host=0.0.0.0 --port="${PORT:-8000}"
