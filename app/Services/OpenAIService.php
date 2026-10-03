@@ -106,41 +106,53 @@ class OpenAIService
 
     /**
      * Perform a POST request to the OpenAI API and return decoded JSON.
+     * Retries a few times on HTTP 429 (free-tier rate limits) with backoff.
      */
     protected function request(string $path, array $payload): array
     {
-        $ch = curl_init($this->apiBase . $path);
-
         $headers = [
             'Content-Type: application/json',
             'Authorization: Bearer ' . $this->apiKey,
         ];
 
-        curl_setopt_array($ch, [
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_POST => true,
-            CURLOPT_HTTPHEADER => $headers,
-            CURLOPT_POSTFIELDS => json_encode($payload),
-            CURLOPT_TIMEOUT => $this->timeout,
-            CURLOPT_CONNECTTIMEOUT => 15,
-        ]);
+        $backoff = [3, 6];
+        $attempt = 0;
 
-        $response = curl_exec($ch);
-        $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        $error = curl_error($ch);
-        curl_close($ch);
+        while (true) {
+            $ch = curl_init($this->apiBase . $path);
 
-        if ($response === false) {
-            throw new Exception('OpenAI request failed: ' . $error);
+            curl_setopt_array($ch, [
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_POST => true,
+                CURLOPT_HTTPHEADER => $headers,
+                CURLOPT_POSTFIELDS => json_encode($payload),
+                CURLOPT_TIMEOUT => $this->timeout,
+                CURLOPT_CONNECTTIMEOUT => 15,
+            ]);
+
+            $response = curl_exec($ch);
+            $status = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            $error = curl_error($ch);
+            curl_close($ch);
+
+            if ($response === false) {
+                throw new Exception('OpenAI request failed: ' . $error);
+            }
+
+            $decoded = json_decode($response, true);
+
+            if ($status === 429 && $attempt < count($backoff)) {
+                sleep($backoff[$attempt]);
+                $attempt++;
+                continue;
+            }
+
+            if ($status < 200 || $status >= 300) {
+                $msg = $decoded['error']['message'] ?? ('HTTP ' . $status);
+                throw new Exception('OpenAI API error: ' . $msg);
+            }
+
+            return is_array($decoded) ? $decoded : [];
         }
-
-        $decoded = json_decode($response, true);
-
-        if ($status < 200 || $status >= 300) {
-            $msg = $decoded['error']['message'] ?? ('HTTP ' . $status);
-            throw new Exception('OpenAI API error: ' . $msg);
-        }
-
-        return is_array($decoded) ? $decoded : [];
     }
 }
