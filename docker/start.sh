@@ -15,6 +15,14 @@ if [ -z "$APP_KEY" ]; then
     export APP_KEY="base64:$(php -r 'echo base64_encode(random_bytes(32));')"
 fi
 
+# config('app.url') must never be null: SetRequestForConsole passes it straight
+# into Request::create() during `artisan serve` boot and a null value is a fatal
+# TypeError that crash-loops the container. Guarantee a non-empty value here.
+if [ -z "$APP_URL" ]; then
+    echo "APP_URL not set - defaulting to http://localhost for console boot."
+    export APP_URL="http://localhost"
+fi
+
 # Discover packages (needed because we install composer deps with --no-scripts).
 php artisan package:discover --ansi || true
 
