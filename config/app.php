@@ -52,9 +52,9 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'https://payrollsystem.caisol.com/'),
+    'url' => env('APP_URL'),
 
-    'asset_url' => env('ASSET_URL', 'https://payrollsystem.caisol.com/public'),
+    'asset_url' => env('ASSET_URL'),
 
     /*
     |--------------------------------------------------------------------------
