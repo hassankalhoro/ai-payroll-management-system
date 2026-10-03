@@ -106,7 +106,7 @@ class OpenAIService
 
     /**
      * Perform a POST request to the OpenAI API and return decoded JSON.
-     * Retries a few times on HTTP 429 (free-tier rate limits) with backoff.
+     * Retries a few times on HTTP 429/503 (free-tier rate limits / overload) with backoff.
      */
     protected function request(string $path, array $payload): array
     {
@@ -141,7 +141,7 @@ class OpenAIService
 
             $decoded = json_decode($response, true);
 
-            if ($status === 429 && $attempt < count($backoff)) {
+            if (($status === 429 || $status === 503) && $attempt < count($backoff)) {
                 sleep($backoff[$attempt]);
                 $attempt++;
                 continue;
